@@ -49,34 +49,47 @@
         >
           <div style="width: 300px; height: 100px; background-color: lightgreen" v-if="load"></div>
         </transition>
+        <hr>
+        <button
+          class="btn btn-primary"
+          @click="selectedComponent == 'app-success-alert' ? selectedComponent = 'app-danger-alert' : selectedComponent = 'app-success-alert'"
+        >Toggle Components</button>
+        <br>
+        <br>
+        <transition name="fade" mode="out-in">
+          <component :is="selectedComponent"></component>
+        </transition>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import DangerAlert from "./DangerAlert.vue";
+import SuccessAlert from "./SuccessAlert.vue";
 export default {
   data() {
     return {
       show: true,
       load: true,
       alertAnimation: "fade",
-      elementWidth: 100
+      elementWidth: 100,
+      selectedComponent: "app-success-alert"
     };
   },
   methods: {
     beforeEnter(el) {
       console.log("beforeEnter");
       this.elementWidth = 100;
-      el.style.width = this.elementWidth + 'px';
+      el.style.width = this.elementWidth + "px";
     },
     enter(el, done) {
       console.log("enter");
       let round = 1;
       const interval = setInterval(() => {
-        el.style.width = (this.elementWidth + round * 10) + 'px';
+        el.style.width = this.elementWidth + round * 10 + "px";
         round++;
-        if(round > 20) {
+        if (round > 20) {
           clearInterval(interval);
           done();
         }
@@ -91,15 +104,15 @@ export default {
     beforeLeave(el) {
       console.log("beforeLeave");
       this.elementWidth = 300;
-      el.style.width = this.elementWidth + 'px';
+      el.style.width = this.elementWidth + "px";
     },
     leave(el, done) {
       console.log("leave");
       let round = 1;
       const interval = setInterval(() => {
-        el.style.width = (this.elementWidth - round * 10) + 'px';
+        el.style.width = this.elementWidth - round * 10 + "px";
         round++;
-        if(round > 20) {
+        if (round > 20) {
           clearInterval(interval);
           done();
         }
@@ -111,6 +124,10 @@ export default {
     leaveCancelled(el) {
       console.log("leaveCancelled");
     }
+  },
+  components: {
+    appDangerAlert: DangerAlert,
+    appSuccessAlert: SuccessAlert
   }
 };
 </script>
